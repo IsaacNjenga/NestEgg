@@ -1,0 +1,9 @@
+.auth-bg {
+  background: rgb(255, 255, 255);
+  
+}
+
+.auth-back {
+  background: url("https://plus.unsplash.com/premium_photo-1681487916420-8f50a06eb60e?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bG9naW4lMjBwYWdlfGVufDB8fDB8fHww")
+    no-repeat center center/contain;height: 100vh;
+}
