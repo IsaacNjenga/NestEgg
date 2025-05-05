@@ -60,7 +60,7 @@ function Profile() {
       const valuesData = { ...values, img: imageUrls[0] };
 
       //console.log(valuesData);
-      const res = await axios.put(`users/update/${userId}`, { valuesData });
+      const res = await axios.put(`users/update/${userId}`, valuesData );
       if (res.data.success) {
         Swal.fire({
           icon: "success",
