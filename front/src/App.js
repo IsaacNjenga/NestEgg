@@ -6,13 +6,13 @@ import Navbar from "./components/navbar.js";
 import Home from "./pages/home.js";
 import Auth from "./pages/auth.js";
 import Cookie from "universal-cookie";
+import Profile from "./pages/profile.js";
 
 export const UserContext = createContext();
 const cookies = new Cookie();
 
 axios.defaults.baseURL = "http://localhost:5000/nestegg";
 axios.defaults.withCredentials = true;
-
 
 const authToken = cookies.get("token");
 function App() {
@@ -38,13 +38,14 @@ function App() {
 
   return (
     <>
-      <UserContext.Provider value={{ isMobile, user}}>
+      <UserContext.Provider value={{ isMobile, user }}>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Navbar />}>
               <Route index element={<Home />} />
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="auth" element={<Auth />} />
+              <Route path="/profile" element={<Profile />} />
             </Route>
           </Routes>
         </BrowserRouter>

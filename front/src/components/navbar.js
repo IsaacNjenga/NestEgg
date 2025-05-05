@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
-import { useLocation, Link, Outlet } from "react-router-dom";
-import { Layout, Menu, Button, Drawer } from "antd";
+import { useLocation, Link, Outlet, useNavigate } from "react-router-dom";
+import { Layout, Menu, Button, Drawer, Avatar } from "antd";
 import { UserContext } from "../App";
 import { MenuOutlined, PoweroffOutlined } from "@ant-design/icons";
 import icon from "../assets/icons/nestegg.png";
@@ -12,6 +12,7 @@ const cookies = new Cookie();
 
 function Navbar() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [current, setCurrent] = useState(location.pathname);
   const { isMobile } = useContext(UserContext);
   const [drawerVisible, setDrawerVisible] = useState(false);
@@ -47,6 +48,9 @@ function Navbar() {
       }
     });
   };
+
+  const pfpUrl =
+    "https://images.unsplash.com/photo-1647685658173-94c4f42725fd?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHByb2ZpbGUlMjBwaWN0dXJlfGVufDB8fDB8fHww";
 
   return (
     <>
@@ -186,12 +190,29 @@ function Navbar() {
                     </Menu.Item>
                   ))}
                 </Menu>
-                <div>
-                  <Button
-                    icon={<PoweroffOutlined />}
-                    style={{ borderRadius: "50%" }}
-                    onClick={handleLogout}
-                  ></Button>
+                <div
+                  style={{ display: "flex", flexDirection: "row", gap: "20px" }}
+                >
+                  <div
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      navigate("/profile");
+                    }}
+                  >
+                    <Avatar
+                      style={{ backgroundColor: "#fde3cf", color: "#f56a00" }}
+                    >
+                      U
+                    </Avatar>
+                    <Avatar src={<img src={pfpUrl} alt="avatar" />} />
+                  </div>
+                  <div>
+                    <Button
+                      icon={<PoweroffOutlined />}
+                      style={{ borderRadius: "50%" }}
+                      onClick={handleLogout}
+                    ></Button>
+                  </div>
                 </div>
               </>
             )}

@@ -7,7 +7,12 @@ import os
 def create_app():
     load_dotenv()
     app = Flask(__name__)
-    CORS(app,supports_credentials=True,origins="http://localhost:3000")
+
+    CORS(app,
+         supports_credentials=True,
+         resources={r"/nestegg/*":{"origins":"http://localhost:3000"}},
+         methods=['GET','POST','PUT','DELETE','OPTIONS'],
+         allow_headers=['Content-Type', 'Authorization'])
 
     #config
     app.config['MONGO_URI']=os.getenv('MONGO_URI')
@@ -20,6 +25,9 @@ def create_app():
 
     from .routes.passwordChange import auth_bp
     app.register_blueprint(auth_bp,url_prefix='/nestegg/auth')
+
+    from .routes.cloudinary import cloudinary_bp
+    app.register_blueprint(cloudinary_bp, url_prefix='/nestegg/image')
 
 
     return app
