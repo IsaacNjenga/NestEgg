@@ -1,8 +1,10 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Button, Card, Col, Divider, Form, Input, Row, Select } from "antd";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Swal from "sweetalert2";
 import ImageUploads from "../components/imageUploads";
+import axios from "axios";
+import { UserContext } from "../App";
 
 const inputStyle = {
   backgroundColor: "#fff",
@@ -26,14 +28,15 @@ const initialValues = {
   firstName: "",
   lastName: "",
   email: "",
-  location: "",
   username: "",
   //   imageUrls: "",
   //   avatarId: "",
   phoneNumber: "",
+  location: "",
   dob: "",
   occupation: "",
   gender: "",
+  img: "",
 };
 
 function Profile() {
@@ -44,17 +47,27 @@ function Profile() {
   const [imagePublicIds, setImagePublicIds] = useState([]);
   const [imageUploading, setImageUploading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
+  const { user } = useContext(UserContext);
+  const userId = user;
 
   const handleChange = (name, value) => {
     setValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setLoading(true);
     try {
-      const valuesData = { ...values };
+      const valuesData = { ...values, img: imageUrls[0] };
 
-      console.log(valuesData);
+      //console.log(valuesData);
+      const res = await axios.put(`users/update/${userId}`, { valuesData });
+      if (res.data.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Profile updated successfully",
+        });
+      }
     } catch (error) {
       console.log(error);
       const errorMessage =
@@ -160,7 +173,6 @@ function Profile() {
                     label="First Name"
                     name="firstName"
                     style={labelStyle}
-                    rules={[{ required: true, message: "Required field" }]}
                   >
                     <Input
                       value={values.firstName}
@@ -176,7 +188,6 @@ function Profile() {
                     label="Last Name"
                     name="lastName"
                     style={labelStyle}
-                    rules={[{ required: true, message: "Required field" }]}
                   >
                     <Input
                       value={values.lastName}
@@ -190,7 +201,6 @@ function Profile() {
                     label="Username"
                     name="username"
                     style={labelStyle}
-                    rules={[{ required: true, message: "Required field" }]}
                   >
                     <Input
                       value={values.username}
@@ -204,7 +214,6 @@ function Profile() {
                     label="Email Address"
                     name="email"
                     style={labelStyle}
-                    rules={[{ required: true, message: "Required field" }]}
                   >
                     <Input
                       value={values.email}
@@ -218,7 +227,6 @@ function Profile() {
                     label="Phone Number"
                     name="phoneNumber"
                     style={labelStyle}
-                    rules={[{ required: true, message: "Required field" }]}
                   >
                     <Input
                       value={values.phoneNumber}

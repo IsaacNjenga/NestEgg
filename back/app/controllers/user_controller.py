@@ -56,7 +56,38 @@ def login_user(request):
     
     return jsonify({"error": "Invalid email or password"}), 401
 
-def delete_user(id):
+def update_user(user_id,request):
     db = current_app.db
-    db.users.delete_one({"_id":ObjectId(id)})
+    data = request.get_json()
+
+    #validate and prepare data for updating
+    update_fields = {}
+    allowed_fields =['location',
+                     'dob',
+                     'occupation',
+                     'gender',
+                     'img',
+                     'phoneNumber',
+                     'firstName',
+                     'email',
+                     'username',
+                     'lastName']
+    for field in allowed_fields:
+        if field in data:
+            update_fields[field] = data[field]
+
+    if not update_fields:
+        return jsonify({'success':False,'message':"No valied field provided to update"}),400
+    
+    try:
+        result = db.users.update_one({"_id":ObjectId(user_id)},{"$set":update_fields})
+        if result.matched_count == 0:
+            return jsonify({'success':False, 'message':"User not found"})
+        return jsonify({'success':True, 'message':"Profile updated successfully"})
+    except Exception as e:
+        return jsonify({'success':False,'error':str(e)}),500
+
+def delete_user(user_id):
+    db = current_app.db
+    db.users.delete_one({"_id":ObjectId(user_id)})
     return jsonify({'msg':'Deleted!'})

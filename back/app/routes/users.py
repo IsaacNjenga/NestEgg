@@ -1,7 +1,7 @@
 from flask import Blueprint, request,jsonify
 from ..utils.auth import token_required
 from ..controllers.user_controller import (
-    get_all_users, add_user, delete_user, login_user
+    get_all_users, add_user, delete_user, login_user,update_user
 )
 
 users_bp = Blueprint('users',__name__)
@@ -22,6 +22,13 @@ def sign_in_user():
 @token_required
 def get_private(current_user_id):
     return jsonify({"msg": "This is a protected route!", "user_id": current_user_id})
+
+@users_bp.route('/update/<user_id>', methods=['PUT', 'OPTIONS'])
+def update_user_profile(user_id):
+    if request.method == 'OPTIONS':
+        return '', 200
+    return update_user(user_id, request)
+
 
 @users_bp.route('/<id>', methods = ['DELETE'])
 def remove_user(id):
