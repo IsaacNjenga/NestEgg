@@ -40,14 +40,13 @@ const initialValues = {
   lastName: "",
   email: "",
   username: "",
-  //   imageUrls: "",
-  //   avatarId: "",
   phoneNumber: "",
   location: "",
   dob: "",
   occupation: "",
   gender: "",
   img: "",
+  imgId: "",
 };
 
 function Profile() {
@@ -75,8 +74,9 @@ function Profile() {
         occupation: userData.occupation,
         gender: userData.gender,
         img: userData.img,
+        imgId: userData.imgId,
       });
-      form.setFieldValue({
+      form.setFieldsValue({
         firstName: userData.firstName,
         lastName: userData.lastName,
         email: userData.email,
@@ -87,6 +87,7 @@ function Profile() {
         occupation: userData.occupation,
         gender: userData.gender,
         img: userData.img,
+        imgId: userData.imgId,
       });
     }
   }, [userData, form]);
@@ -98,8 +99,11 @@ function Profile() {
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const valuesData = { ...values, img: imageUrls[0] };
-      //console.log(valuesData);
+      const valuesData = {
+        ...values,
+        img: imageUrls[0],
+        imgId: imagePublicIds[0],
+      };
       const res = await axios.put(`users/update/${userId}`, valuesData);
       if (res.data.success) {
         Swal.fire({
@@ -290,6 +294,7 @@ function Profile() {
                     <Select
                       placeholder="Select gender"
                       value={values.gender}
+                      style={inputStyle}
                       onChange={(value) => handleChange("gender", value)}
                     >
                       <Select.Option value="male">Male</Select.Option>

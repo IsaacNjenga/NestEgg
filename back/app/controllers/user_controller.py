@@ -105,6 +105,7 @@ def update_user(user_id, request):
         "email",
         "username",
         "lastName",
+        "imgId",
     ]
     for field in allowed_fields:
         if field in data:
