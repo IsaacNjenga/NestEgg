@@ -6,6 +6,7 @@ import { MenuOutlined, PoweroffOutlined } from "@ant-design/icons";
 import icon from "../assets/icons/nestegg.png";
 import Cookie from "universal-cookie";
 import Swal from "sweetalert2";
+import UseGetUser from "../assets/hooks/useGetUser";
 
 const { Header, Content, Footer } = Layout;
 const cookies = new Cookie();
@@ -16,6 +17,7 @@ function Navbar() {
   const [current, setCurrent] = useState(location.pathname);
   const { isMobile } = useContext(UserContext);
   const [drawerVisible, setDrawerVisible] = useState(false);
+  const { userData } = UseGetUser();
 
   const navItems = [
     { label: "Home", path: "/" },
@@ -199,12 +201,29 @@ function Navbar() {
                       navigate("/profile");
                     }}
                   >
-                    <Avatar
-                      style={{ backgroundColor: "#fde3cf", color: "#f56a00" }}
-                    >
-                      U
-                    </Avatar>
-                    <Avatar src={<img src={pfpUrl} alt="avatar" />} />
+                    {userData.img === "" ? (
+                      <Avatar
+                        style={{ backgroundColor: "#fde3cf", color: "#f56a00" }}
+                        size={{
+                          xs: 24,
+                          sm: 32,
+                          md: 40,
+                          lg: 64,
+                          xl: 80,
+                          xxl: 100,
+                        }}
+                      >
+                        {userData.firstName.charAt(0)}
+                        {userData.lastName.charAt(0)}
+                      </Avatar>
+                    ) : (
+                      <Avatar
+                        src={
+                          <img src={userData.img} size="large" alt="avatar" />
+                        }
+                      />
+                    )}
+                    {userData.firstName} {userData.lastName}
                   </div>
                   <div>
                     <Button
@@ -220,7 +239,7 @@ function Navbar() {
           {/* Mobile Navigation */}
           <Drawer
             placement="right"
-            width={280}
+            width={300}
             onClose={toggleDrawer}
             open={drawerVisible}
           >
@@ -235,6 +254,50 @@ function Navbar() {
                 fontWeight: "bold",
               }}
             >
+              <Menu.Item>
+                <div
+                  style={{
+                    cursor: "pointer",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                  onClick={() => {
+                    navigate("/profile");
+                  }}
+                >
+                  <div>
+                    {userData.firstName} {userData.lastName}
+                  </div>
+                  <div>
+                    {userData.img === "" ? (
+                      <Avatar
+                        style={{
+                          backgroundColor: "#fde3cf",
+                          color: "#f56a00",
+                        }}
+                        size={{
+                          xs: 24,
+                          sm: 32,
+                          md: 40,
+                          lg: 64,
+                          xl: 80,
+                          xxl: 100,
+                        }}
+                      >
+                        {userData.firstName.charAt(0)}
+                        {userData.lastName.charAt(0)}
+                      </Avatar>
+                    ) : (
+                      <Avatar
+                        src={
+                          <img src={userData.img} size="large" alt="avatar" />
+                        }
+                      />
+                    )}
+                  </div>
+                </div>
+              </Menu.Item>
               {navItems.map((item) => (
                 <Menu.Item key={item.path}>
                   <Link
@@ -245,6 +308,22 @@ function Navbar() {
                   </Link>
                 </Menu.Item>
               ))}
+              <Menu.Item>
+                <div>
+                  <Button
+                    type="primary"
+                    danger
+                    onClick={handleLogout}
+                    style={{
+                      cursor: "pointer",
+                      fontFamily: "Raleway",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Sign Out
+                  </Button>
+                </div>
+              </Menu.Item>
             </Menu>
           </Drawer>
         </div>
