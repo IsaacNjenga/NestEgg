@@ -6,6 +6,7 @@ from ..controllers.user_controller import (
     delete_user,
     login_user,
     update_user,
+    get_user,
 )
 
 users_bp = Blueprint("users", __name__)
@@ -14,6 +15,13 @@ users_bp = Blueprint("users", __name__)
 @users_bp.route("/get-users", methods=["GET"])
 def get_users():
     return get_all_users()
+
+
+@users_bp.route("/profile-data/<user_id>", methods=["GET", "OPTIONS"])
+def get_user_profile(user_id):
+    if request.method == "OPTIONS":
+        return "", 200
+    return get_user(user_id)
 
 
 @users_bp.route("/sign-up", methods=["POST"])
@@ -34,9 +42,9 @@ def get_private(current_user_id):
 
 @users_bp.route("/update/<user_id>", methods=["PUT", "OPTIONS"])
 def update_user_profile(user_id):
-      if request.method == "OPTIONS":
-        return '', 200
-      return update_user(user_id, request)
+    if request.method == "OPTIONS":
+        return "", 200
+    return update_user(user_id, request)
 
 
 @users_bp.route("/<id>", methods=["DELETE"])

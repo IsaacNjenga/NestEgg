@@ -1,10 +1,21 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, Card, Col, Divider, Form, Input, Row, Select } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Divider,
+  Form,
+  Input,
+  Row,
+  Select,
+  Spin,
+} from "antd";
 import React, { useContext, useState } from "react";
 import Swal from "sweetalert2";
 import ImageUploads from "../components/imageUploads";
 import axios from "axios";
 import { UserContext } from "../App";
+import UseGetUser from "../assets/hooks/useGetUser";
 
 const inputStyle = {
   backgroundColor: "#fff",
@@ -41,6 +52,7 @@ const initialValues = {
 
 function Profile() {
   const [form] = Form.useForm();
+  const { userData, userDataLoading } = UseGetUser();
   const [values, setValues] = useState(initialValues);
   const [loading, setLoading] = useState(false);
   const [imageUrls, setImageUrls] = useState([]);
@@ -50,6 +62,35 @@ function Profile() {
   const { user } = useContext(UserContext);
   const userId = user;
 
+  React.useEffect(() => {
+    if (userData) {
+      setValues({
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        email: userData.email,
+        username: userData.username,
+        phoneNumber: userData.phoneNumber,
+        location: userData.location,
+        dob: userData.dob,
+        occupation: userData.occupation,
+        gender: userData.gender,
+        img: userData.img,
+      });
+      form.setFieldValue({
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        email: userData.email,
+        username: userData.username,
+        phoneNumber: userData.phoneNumber,
+        location: userData.location,
+        dob: userData.dob,
+        occupation: userData.occupation,
+        gender: userData.gender,
+        img: userData.img,
+      });
+    }
+  }, [userData, form]);
+
   const handleChange = (name, value) => {
     setValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
@@ -58,9 +99,8 @@ function Profile() {
     setLoading(true);
     try {
       const valuesData = { ...values, img: imageUrls[0] };
-
       //console.log(valuesData);
-      const res = await axios.put(`users/update/${userId}`, valuesData );
+      const res = await axios.put(`users/update/${userId}`, valuesData);
       if (res.data.success) {
         Swal.fire({
           icon: "success",
@@ -125,6 +165,9 @@ function Profile() {
 
   return (
     <>
+      {userDataLoading && (
+        <Spin size="large" style={{ display: "block", margin: "50px auto" }} />
+      )}
       <Card
         style={{
           background: "#fff",
@@ -151,7 +194,12 @@ function Profile() {
           </div>
         </Divider>
 
-        <Form layout="vertical" onFinish={handleSubmit} form={form}>
+        <Form
+          layout="vertical"
+          onFinish={handleSubmit}
+          form={form}
+          initialValues={values}
+        >
           <Row gutter={[20, 20]}>
             <Col xs={24} md={8}>
               <ImageUploads
@@ -301,7 +349,7 @@ function Profile() {
               loading={loading}
               icon={<EditOutlined />}
             >
-              Update Your Profile
+              {loading ? "Updating..." : "Update Your Profile"}
             </Button>
             <Button
               block
@@ -311,7 +359,7 @@ function Profile() {
               icon={<DeleteOutlined />}
               loading={deleteLoading}
             >
-              Delete Your Profile
+              {deleteLoading ? "Deleting..." : "Delete your profile"}
             </Button>
           </div>
         </Form>

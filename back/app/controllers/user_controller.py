@@ -24,6 +24,23 @@ def get_all_users():
     )
 
 
+def get_user(user_id):
+    db = current_app.db
+    try:
+        user = db.users.find_one({"_id": ObjectId(user_id)}, {"password": 0})
+        if not user:
+            return jsonify({"success": False, "message": "User not found"}), 404
+
+        # Serialize ObjectId to string
+        user["_id"] = str(user["_id"])
+
+        return jsonify(
+            {"success": True, "message": "Profile fetched successfully", "user": user}
+        ), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
 def add_user(request):
     db = current_app.db
     data = request.get_json()
