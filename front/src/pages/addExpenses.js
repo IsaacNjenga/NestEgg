@@ -165,6 +165,27 @@ const AddExpenses = () => {
                                     </Select.Option>
                                   ))}
                                 </Select>
+                                <Form.Item></Form.Item>
+                              </Form.Item>
+                            </Col>
+
+                            <Col xs={24} md={7}>
+                              <Form.Item shouldUpdate>
+                                {({ getFieldValue }) => {
+                                  const freq = getFieldValue([
+                                    "Expenses",
+                                    field.name,
+                                    `${field.field}Details`,
+                                    subField.name,
+                                    "frequency",
+                                  ]);
+                                  return freq ? (
+                                    <Typography.Text type="secondary">
+                                      Selected Frequency:{" "}
+                                      <strong>{freq}</strong>
+                                    </Typography.Text>
+                                  ) : null;
+                                }}
                               </Form.Item>
                             </Col>
 

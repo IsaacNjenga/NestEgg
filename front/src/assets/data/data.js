@@ -20,6 +20,7 @@ export const frequency = [
   { value: "biWeekly", label: "Bi-Weekly" },
   { value: "semiMonthly", label: "Semi-Monthly" },
   { value: "monthly", label: "Monthly" },
+  { value: "semiAnnually", label: "SemiAnnually" },
   { value: "annually", label: "Annually" },
   { value: "commission", label: "Commission" },
   { value: "bonus", label: "Bonus" },
@@ -46,7 +47,7 @@ export const transportationCategory = [
 ];
 export const personalCareCategory = [
   { value: "toiletries", label: "Toiletries" },
-  { value: "hair", label: "Haircuts/Styling" },
+  { value: "hairAndStyling", label: "Haircuts/Styling" },
   { value: "gymMembership", label: "Gym Membership" },
   { value: "clothing", label: "Clothing" },
   { value: "education", label: "Education/Tuition" },

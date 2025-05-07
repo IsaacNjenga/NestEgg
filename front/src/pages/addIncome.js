@@ -36,7 +36,6 @@ function AddIncome() {
                   key={field.key}
                   title={`Source ${index + 1}`}
                   style={{ marginBottom: 24, borderRadius: 12 }}
-                  bordered
                   extra={
                     fields.length > 1 && (
                       <Button
@@ -48,31 +47,37 @@ function AddIncome() {
                     )
                   }
                 >
-                  <Row gutter={16}>
-                    <Col span={24}>
-                      <Form.Item
-                        label="Income Source"
-                        name={[field.name, "incomeSource"]}
-                        rules={[
-                          { required: true, message: "Please select a source" },
-                        ]}
-                      >
-                        <Select placeholder="Select source">
-                          {incomeSources.map((i) => (
-                            <Select.Option key={i.value} value={i.value}>
-                              {i.label}
-                            </Select.Option>
-                          ))}
-                        </Select>
-                      </Form.Item>
-                    </Col>
-                  </Row>
-
-                  <Form.List name={[field.name, "incomeDetails"]}>
+                  <Form.List
+                    name={[field.name, `incomeSourceDetails${index + 1}`]}
+                  >
                     {(subFields, subOpt) => (
                       <>
                         {subFields.map((subField) => (
                           <Row gutter={16} key={subField.key} align="middle">
+                            {" "}
+                            <Col span={10}>
+                              <Form.Item
+                                label="Income Source"
+                                name={[subField.name, "incomeSource"]}
+                                rules={[
+                                  {
+                                    required: true,
+                                    message: "Please select a source",
+                                  },
+                                ]}
+                              >
+                                <Select placeholder="Select source">
+                                  {incomeSources.map((i) => (
+                                    <Select.Option
+                                      key={i.value}
+                                      value={i.value}
+                                    >
+                                      {i.label}
+                                    </Select.Option>
+                                  ))}
+                                </Select>
+                              </Form.Item>
+                            </Col>
                             <Col span={10}>
                               <Form.Item
                                 label="Amount"
@@ -105,6 +110,14 @@ function AddIncome() {
                                     </Select.Option>
                                   ))}
                                 </Select>
+                              </Form.Item>
+                            </Col>
+                            <Col span={10}>
+                              <Form.Item
+                                label="Receipt Date"
+                                name={[subField.name, "dateOfReceipt"]}
+                              >
+                                <Input type="date" />
                               </Form.Item>
                             </Col>
                             <Col span={4}>
