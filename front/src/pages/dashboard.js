@@ -2,12 +2,9 @@ import React from "react";
 
 function Dashboard() {
   return <div>Dashboard
-  Here are common features in a finance tracking app:
 
 User Account Management:
 
-User registration and login
-Password recovery
 Multiple account support (bank accounts, credit cards, cash)
 Income and Expense Tracking:
 

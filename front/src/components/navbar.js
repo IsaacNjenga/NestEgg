@@ -20,8 +20,9 @@ function Navbar() {
   const { userData } = UseGetUser();
 
   const navItems = [
-    { label: "Home", path: "/" },
+    //{ label: "Home", path: "/" },
     { label: "Dashboard", path: "/dashboard" },
+    { label: "Income", path: "/income" },
   ];
 
   const toggleDrawer = () => setDrawerVisible(!drawerVisible);
@@ -50,9 +51,6 @@ function Navbar() {
       }
     });
   };
-
-  const pfpUrl =
-    "https://images.unsplash.com/photo-1647685658173-94c4f42725fd?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fHByb2ZpbGUlMjBwaWN0dXJlfGVufDB8fDB8fHww";
 
   return (
     <>
@@ -193,7 +191,11 @@ function Navbar() {
                   ))}
                 </Menu>
                 <div
-                  style={{ display: "flex", flexDirection: "row", gap: "20px" }}
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "20px",
+                  }}
                 >
                   <div
                     style={{ cursor: "pointer" }}
@@ -201,20 +203,16 @@ function Navbar() {
                       navigate("/profile");
                     }}
                   >
-                    {userData.img === "" ? (
+                    {!userData.img ? (
                       <Avatar
-                        style={{ backgroundColor: "#fde3cf", color: "#f56a00" }}
-                        size={{
-                          xs: 24,
-                          sm: 32,
-                          md: 40,
-                          lg: 64,
-                          xl: 80,
-                          xxl: 100,
+                        style={{
+                          backgroundColor: "#fde3cf",
+                          color: "#f56a00",
                         }}
+                        size="large"
                       >
-                        {userData.firstName.charAt(0)}
-                        {userData.lastName.charAt(0)}
+                        {userData.firstName?.charAt(0)}
+                        {userData.lastName?.charAt(0)}
                       </Avatar>
                     ) : (
                       <Avatar
@@ -270,23 +268,16 @@ function Navbar() {
                     {userData.firstName} {userData.lastName}
                   </div>
                   <div>
-                    {userData.img === "" ? (
+                    {!userData.img ? (
                       <Avatar
                         style={{
                           backgroundColor: "#fde3cf",
                           color: "#f56a00",
                         }}
-                        size={{
-                          xs: 24,
-                          sm: 32,
-                          md: 40,
-                          lg: 64,
-                          xl: 80,
-                          xxl: 100,
-                        }}
+                        size="large"
                       >
-                        {userData.firstName.charAt(0)}
-                        {userData.lastName.charAt(0)}
+                        {userData.firstName?.charAt(0)}
+                        {userData.lastName?.charAt(0)}
                       </Avatar>
                     ) : (
                       <Avatar

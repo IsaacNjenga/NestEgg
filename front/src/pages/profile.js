@@ -63,7 +63,7 @@ function Profile() {
 
   React.useEffect(() => {
     if (userData) {
-      setValues({
+      const newValues = {
         firstName: userData.firstName,
         lastName: userData.lastName,
         email: userData.email,
@@ -74,21 +74,10 @@ function Profile() {
         occupation: userData.occupation,
         gender: userData.gender,
         img: userData.img,
-        imgId: userData.imgId,
-      });
-      form.setFieldsValue({
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        email: userData.email,
-        username: userData.username,
-        phoneNumber: userData.phoneNumber,
-        location: userData.location,
-        dob: userData.dob,
-        occupation: userData.occupation,
-        gender: userData.gender,
-        img: userData.img,
-        imgId: userData.imgId,
-      });
+      };
+
+      setValues(newValues);
+      form.setFieldsValue(newValues);
     }
   }, [userData, form]);
 

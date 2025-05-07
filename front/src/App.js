@@ -7,6 +7,7 @@ import Home from "./pages/home.js";
 import Auth from "./pages/auth.js";
 import Cookie from "universal-cookie";
 import Profile from "./pages/profile.js";
+import Income from "./pages/income.js";
 
 export const UserContext = createContext();
 const cookies = new Cookie();
@@ -46,6 +47,7 @@ function App() {
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="auth" element={<Auth />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/income" element={<Income />} />
             </Route>
           </Routes>
         </BrowserRouter>
