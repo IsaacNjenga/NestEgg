@@ -12,6 +12,7 @@ import {
   entertainmentCategory,
   debtpaymentsCategory,
   miscellaneousCategory,
+  frequency,
 } from "../assets/data/data";
 
 const fieldss = [
@@ -67,79 +68,107 @@ const fieldss = [
   },
 ];
 
-function AddExpenses() {
+const AddExpenses = () => {
   const [form] = Form.useForm();
+
   return (
-    <>
-      <Form
-        form={form}
-        layout="horizontal"
-        style={{ maxWidth: 800, margin: "0 auto" }}
+    <div
+      style={{
+        maxWidth: 900,
+        margin: "0 auto",
+        padding: "2rem 1rem",
+        fontFamily: "Roboto",
+      }}
+    >
+      <Typography.Title
+        level={2}
+        style={{ fontFamily: "Raleway", textAlign: "center", marginBottom: 40 }}
       >
+        Expenses Breakdown
+      </Typography.Title>
+
+      <Form form={form} layout="vertical">
         <Form.List name="Expenses">
           {(fields, { add, remove }) => (
             <>
-              {fieldss.map((field, index) => (
+              {fieldss.map((field) => (
                 <Card
                   key={field.key}
-                  size="medium"
-                  title={`${field.field}`}
-                  style={{ marginBottom: 10 }}
+                  title={
+                    <Typography.Title
+                      level={5}
+                      style={{ fontFamily: "Raleway", marginBottom: 0 }}
+                    >
+                      {field.field}
+                    </Typography.Title>
+                  }
+                  style={{
+                    marginBottom: 24,
+                    borderRadius: 12,
+                    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+                  }}
+                  bodyStyle={{ padding: "1.5rem" }}
                 >
-                  <Row gutter={16}>
-                    <Col span={24}>
-                      <Form.Item
-                        label={`${field.field}`}
-                        name={[field.value, `${field.value}Category`]}
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please select a category",
-                          },
-                        ]}
-                      >
-                        <Select placeholder="Select...">
-                          {field.category.map((i) => (
-                            <Select.Option key={i.value} value={i.value}>
-                              {i.label}
-                            </Select.Option>
-                          ))}
-                        </Select>
-                      </Form.Item>
-                    </Col>
-                  </Row>
-
-                  <Form.List name={[field.value, `${field.value}Details;`]}>
+                  <Form.List name={[field.value, `${field.value}Details`]}>
                     {(subFields, subOpt) => (
                       <>
                         {subFields.map((subField) => (
-                          <Row gutter={16} key={subField.key} align="left">
-                            <Col span={10}>
+                          <Row gutter={16} key={subField.key} align="middle">
+                            <Col xs={24} md={7}>
+                              <Form.Item
+                                label="Expense"
+                                name={[subField.name, "expenseName"]}
+                                rules={[
+                                  { required: true, message: "Required" },
+                                ]}
+                              >
+                                <Select placeholder="Select category">
+                                  {field.category.map((i) => (
+                                    <Select.Option
+                                      key={i.value}
+                                      value={i.value}
+                                    >
+                                      {i.label}
+                                    </Select.Option>
+                                  ))}
+                                </Select>
+                              </Form.Item>
+                            </Col>
+
+                            <Col xs={24} md={7}>
                               <Form.Item
                                 label="Amount"
                                 name={[subField.name, "amount"]}
                                 rules={[
-                                  { required: true, message: "Enter amount" },
+                                  { required: true, message: "Required" },
                                 ]}
                               >
-                                <Input placeholder="e.g. 1000" />
+                                <Input placeholder="1000" />
                               </Form.Item>
                             </Col>
-                            <Col span={10}>
+
+                            <Col xs={24} md={7}>
                               <Form.Item
                                 label="Frequency"
                                 name={[subField.name, "frequency"]}
                                 rules={[
-                                  {
-                                    required: true,
-                                    message: "Select frequency",
-                                  },
+                                  { required: true, message: "Required" },
                                 ]}
                               >
-                                <Input />
+                                <Select placeholder="Select...">
+                                  {frequency.map((f) => (
+                                    <Select.Option
+                                      key={f.value}
+                                      value={f.value}
+                                    >
+                                      {f.label}
+                                    </Select.Option>
+                                  ))}
+                                </Select>
                               </Form.Item>
                             </Col>
-                            <Col span={4}>
+
+                            <Col xs={24} md={3} style={{ textAlign: "center" }}>
                               <Button
                                 danger
                                 type="text"
@@ -149,13 +178,19 @@ function AddExpenses() {
                             </Col>
                           </Row>
                         ))}
-                        <Form.Item wrapperCol={{ offset: 6 }}>
+
+                        <Form.Item>
                           <Button
                             type="dashed"
                             icon={<PlusOutlined />}
                             onClick={() => subOpt.add()}
+                            style={{
+                              width: "100%",
+                              fontFamily: "Roboto",
+                              borderStyle: "dashed",
+                            }}
                           >
-                            Add expense Detail
+                            Add Expense Detail
                           </Button>
                         </Form.Item>
                       </>
@@ -163,31 +198,28 @@ function AddExpenses() {
                   </Form.List>
                 </Card>
               ))}
-
-              <Form.Item>
-                <Button
-                  type="dashed"
-                  onClick={() => add()}
-                  block
-                  icon={<PlusOutlined />}
-                >
-                  Add expense
-                </Button>
-              </Form.Item>
             </>
           )}
         </Form.List>
-        {/* Debug Preview */}
-        <Form.Item shouldUpdate noStyle>
+
+        <Form.Item noStyle shouldUpdate>
           {() => (
-            <Typography.Paragraph>
+            <Typography.Paragraph
+              style={{
+                background: "#f9f9f9",
+                padding: "1rem",
+                borderRadius: 8,
+                fontSize: "0.85rem",
+                fontFamily: "Roboto",
+              }}
+            >
               <pre>{JSON.stringify(form.getFieldsValue(), null, 2)}</pre>
             </Typography.Paragraph>
           )}
         </Form.Item>
       </Form>
-    </>
+    </div>
   );
-}
+};
 
 export default AddExpenses;

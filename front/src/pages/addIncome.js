@@ -1,3 +1,4 @@
+// AddIncome.jsx
 import React from "react";
 import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Card, Form, Input, Row, Col, Typography, Select } from "antd";
@@ -7,14 +8,25 @@ function AddIncome() {
   const [form] = Form.useForm();
 
   return (
-    <>
+    <div
+      style={{
+        maxWidth: 900,
+        margin: "0 auto",
+        padding: "2rem 1rem",
+        fontFamily: "Roboto",
+      }}
+    >
+      {" "}
+      <Typography.Title
+        level={2}
+        style={{ fontFamily: "Raleway", textAlign: "center", marginBottom: 40 }}
+      >
+        Income
+      </Typography.Title>
       <Form
         form={form}
-        //name="dynamic_form_complex"
-        initialValues={{ items: [{}] }}
-        autoComplete="off"
-        layout="horizontal"
-        style={{ maxWidth: 800, margin: "0 auto" }}
+        layout="vertical"
+        style={{ maxWidth: 900, margin: "2rem auto" }}
       >
         <Form.List name="Source Of Income">
           {(fields, { add, remove }) => (
@@ -22,9 +34,9 @@ function AddIncome() {
               {fields.map((field, index) => (
                 <Card
                   key={field.key}
-                  size="small"
                   title={`Source ${index + 1}`}
-                  style={{ marginBottom: 10 }}
+                  style={{ marginBottom: 24, borderRadius: 12 }}
+                  bordered
                   extra={
                     fields.length > 1 && (
                       <Button
@@ -60,7 +72,7 @@ function AddIncome() {
                     {(subFields, subOpt) => (
                       <>
                         {subFields.map((subField) => (
-                          <Row gutter={16} key={subField.key} align="left">
+                          <Row gutter={16} key={subField.key} align="middle">
                             <Col span={10}>
                               <Form.Item
                                 label="Amount"
@@ -105,7 +117,7 @@ function AddIncome() {
                             </Col>
                           </Row>
                         ))}
-                        <Form.Item wrapperCol={{ offset: 6 }}>
+                        <Form.Item>
                           <Button
                             type="dashed"
                             icon={<PlusOutlined />}
@@ -119,13 +131,12 @@ function AddIncome() {
                   </Form.List>
                 </Card>
               ))}
-
               <Form.Item>
                 <Button
                   type="dashed"
-                  onClick={() => add()}
                   block
                   icon={<PlusOutlined />}
+                  onClick={() => add()}
                 >
                   Add Income Source
                 </Button>
@@ -134,7 +145,6 @@ function AddIncome() {
           )}
         </Form.List>
 
-        {/* Debug Preview */}
         <Form.Item shouldUpdate noStyle>
           {() => (
             <Typography.Paragraph>
@@ -143,9 +153,7 @@ function AddIncome() {
           )}
         </Form.Item>
       </Form>
-
-      
-    </>
+    </div>
   );
 }
 
