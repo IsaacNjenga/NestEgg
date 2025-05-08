@@ -2,7 +2,6 @@
 import React from "react";
 import AddIncome from "./addIncome";
 import AddExpenses from "./addExpenses";
-import DateRangePicker from "../components/dateRangePicker";
 
 function Income() {
   return (
@@ -18,7 +17,6 @@ function Income() {
       calculating (Housing Expenses / Total Income) * 100%.
       <AddIncome />
       <AddExpenses />
-      <DateRangePicker />
     </>
   );
 }

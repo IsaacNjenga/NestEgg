@@ -1,6 +1,15 @@
 import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
-import { Button, Card, Form, Input, Row, Col, Typography, Select } from "antd";
-import React from "react";
+import {
+  Button,
+  Card,
+  Form,
+  Input,
+  Row,
+  Col,
+  Typography,
+  Select,
+} from "antd";
+import React, { useState } from "react";
 import {
   housingCategory,
   foodCategory,
@@ -14,7 +23,8 @@ import {
   miscellaneousCategory,
   frequency,
 } from "../assets/data/data";
-import DateRangePicker from "../components/dateRangePicker";
+import StartDate from "../components/startDate";
+import EndDate from "../components/endDate";
 
 const fieldss = [
   { key: 1, field: "Housing", value: "housing", category: housingCategory },
@@ -71,6 +81,8 @@ const fieldss = [
 
 const AddExpenses = () => {
   const [form] = Form.useForm();
+  const [range, setRange] = useState("monthly");
+  const [startDate, setStartDate] = useState(null);
 
   return (
     <div
@@ -156,7 +168,11 @@ const AddExpenses = () => {
                                   { required: true, message: "Required" },
                                 ]}
                               >
-                                <Select placeholder="Select...">
+                                <Select
+                                  placeholder="Select..."
+                                  onChange={(value) => setRange(value)}
+                                  value={range}
+                                >
                                   {frequency.map((f) => (
                                     <Select.Option
                                       key={f.value}
@@ -170,9 +186,19 @@ const AddExpenses = () => {
                             </Col>
 
                             <Col xs={24} md={12}>
-                              <Form.Item>
-                                <DateRangePicker />
-                              </Form.Item>
+                              <StartDate
+                                fieldName={subField.name}
+                                startDate={startDate}
+                                setStartDate={setStartDate}
+                                range={range}
+                              />
+
+                              <EndDate
+                                range={range}
+                                startDate={startDate}
+                                fieldName={subField.name}
+                                form={form}
+                              />
                             </Col>
 
                             <Col xs={24} md={3} style={{ textAlign: "center" }}>
