@@ -1,14 +1,5 @@
 import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Card,
-  Form,
-  Input,
-  Row,
-  Col,
-  Typography,
-  Select,
-} from "antd";
+import { Button, Card, Form, Input, Row, Col, Typography, Select } from "antd";
 import React, { useState } from "react";
 import {
   housingCategory,
@@ -25,6 +16,7 @@ import {
 } from "../assets/data/data";
 import StartDate from "../components/startDate";
 import EndDate from "../components/endDate";
+import Swal from "sweetalert2";
 
 const fieldss = [
   { key: 1, field: "Housing", value: "housing", category: housingCategory },
@@ -83,11 +75,29 @@ const AddExpenses = () => {
   const [form] = Form.useForm();
   const [range, setRange] = useState("monthly");
   const [startDate, setStartDate] = useState(null);
+  const [loading, setLoading] = useState(false);
 
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const allValues = await form.validateFields();
+      console.log(allValues);
+    } catch (error) {
+      console.log(error);
+      const errorMessage =
+        error.response && error.response.data && error.response.data.error
+          ? error.response.data.error
+          : "An unexpected error occurred. Please try again";
+
+      Swal.fire({ icon: "error", title: "Error", text: errorMessage });
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div
       style={{
-        maxWidth: 900,
+        maxWidth: 1000,
         margin: "0 auto",
         padding: "2rem 1rem",
         fontFamily: "Roboto",
@@ -100,7 +110,7 @@ const AddExpenses = () => {
         Expenses Breakdown
       </Typography.Title>
 
-      <Form form={form} layout="vertical">
+      <Form form={form} layout="vertical" onFinish={handleSubmit}>
         <Form.List name="Expenses">
           {(fields, { add, remove }) => (
             <>
@@ -234,6 +244,12 @@ const AddExpenses = () => {
             </>
           )}
         </Form.List>
+
+        <Form.Item>
+          <Button type="primary" loading={loading} htmlType="submit">
+            {loading ? "Submitting..." : "Submit"}
+          </Button>
+        </Form.Item>
 
         <Form.Item noStyle shouldUpdate>
           {() => (

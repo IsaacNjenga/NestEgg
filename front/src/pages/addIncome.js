@@ -1,11 +1,33 @@
 // AddIncome.jsx
-import React from "react";
+import React, { useState } from "react";
 import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Card, Form, Input, Row, Col, Typography, Select } from "antd";
 import { incomeSources, frequency } from "../assets/data/data.js";
+import Swal from "sweetalert2";
 
 function AddIncome() {
   const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+
+
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const allValues = await form.validateFields();
+      console.log(allValues);
+    } catch (error) {
+      console.log(error);
+      const errorMessage =
+        error.response && error.response.data && error.response.data.error
+          ? error.response.data.error
+          : "An unexpected error occurred. Please try again";
+
+      Swal.fire({ icon: "error", title: "Error", text: errorMessage });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div
@@ -27,6 +49,7 @@ function AddIncome() {
         form={form}
         layout="vertical"
         style={{ maxWidth: 900, margin: "2rem auto" }}
+        onFinish={handleSubmit}
       >
         <Form.List name="Source Of Income">
           {(fields, { add, remove }) => (
@@ -157,7 +180,11 @@ function AddIncome() {
             </>
           )}
         </Form.List>
-
+        <Form.Item>
+          <Button type="primary" loading={loading} htmlType="submit">
+            {loading ? "Submitting..." : "Submit"}
+          </Button>
+        </Form.Item>
         <Form.Item shouldUpdate noStyle>
           {() => (
             <Typography.Paragraph>
