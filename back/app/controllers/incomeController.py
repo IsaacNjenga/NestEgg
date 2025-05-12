@@ -53,11 +53,10 @@ def get_all_incomes(user_id):
         return jsonify({"success": False, "error": str(e)}), 500
 
 
-def update_income(income_id):
+def update_income(detail_id):
     db = current_app.db
     data = request.get_json()
 
-    detail_id = data.get("detailId")
     if not detail_id:
         return jsonify({"success": False, "message": "Missing detailId"}), 400
 

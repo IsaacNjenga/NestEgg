@@ -24,11 +24,11 @@ def get_user_incomes(user_id):
     return get_all_incomes(user_id)
 
 
-@income_bp.route("/update-income/<income_id>", methods=["PUT", "OPTIONS"])
-def updating_income(income_id):
+@income_bp.route("/update-income/<detail_id>", methods=["PUT", "OPTIONS"])
+def updating_income(detail_id):
     if request.method == "OPTIONS":
         return "", 200
-    return update_income(income_id)
+    return update_income(detail_id)
 
 
 @income_bp.route("/delete-income/<income_id>", methods=["DELETE", "OPTIONS"])

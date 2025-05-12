@@ -21,6 +21,26 @@ import UpdateIncomeModal from "./updateIncomeModal";
 
 const { Title, Text } = Typography;
 
+const cardStyle = {
+  marginBottom: 24,
+  borderRadius: 12,
+  boxShadow: "0 2px 8px rgba(0, 0, 0, 0.06)",
+  fontFamily: "Roboto, sans-serif",
+};
+
+const headerStyle = {
+  fontFamily: "Raleway, sans-serif",
+  textAlign: "center",
+  marginBottom: 32,
+};
+
+const pageStyle = {
+  maxWidth: 800,
+  margin: "auto",
+  padding: 24,
+  fontFamily: "Roboto, sans-serif",
+};
+
 function IncomeData({ allIncomeData, allIncomeLoading, refreshKey }) {
   const [openDelete, setOpenDelete] = useState(null);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -70,10 +90,11 @@ function IncomeData({ allIncomeData, allIncomeLoading, refreshKey }) {
 
   return (
     <>
-      <div style={{ maxWidth: 800, margin: "auto", padding: 16 }}>
-        <Title level={3} style={{ textAlign: "center", marginBottom: 24 }}>
-          All your income entries
+      <div style={pageStyle}>
+        <Title level={3} style={headerStyle}>
+          All Your Income Entries
         </Title>
+
         {allIncomeLoading ? (
           <Space
             direction="vertical"
@@ -86,33 +107,28 @@ function IncomeData({ allIncomeData, allIncomeLoading, refreshKey }) {
           allIncomeData.map((entry) => (
             <Card
               key={entry._id}
-              size="small"
-              style={{ marginBottom: 16 }}
+              size="default"
               title={
                 <div
                   style={{
                     display: "flex",
-                    flexDirection: "row",
                     justifyContent: "space-between",
-                    margin: "10px 0px",
+                    alignItems: "center",
                   }}
                 >
-                  <div>
-                    <Text type="secondary" style={{ fontSize: 12 }}>
-                      Date: {format(new Date(entry.timestamp), "PPPP")}
-                    </Text>
-                  </div>
-                  <div style={{ display: "flex", gap: "5px" }}>
+                  <Text type="secondary" style={{ fontSize: 13 }}>
+                    {format(new Date(entry.timestamp), "PPPP")}
+                  </Text>
+                  <div style={{ display: "flex", gap: 8 }}>
                     <Button
                       type="dashed"
                       icon={<PlusCircleOutlined />}
                       shape="circle"
+                      title="Add Income"
                     />
-
                     <Popconfirm
                       title="Are you sure?"
-                      description="This action cannot be undone!"
-                      open={openDelete}
+                      description="This will delete all sources under this income entry."
                       onConfirm={() => handleFieldDelete(entry._id)}
                       okButtonProps={{ loading: confirmLoading }}
                       onCancel={handleDeleteCancel}
@@ -122,41 +138,40 @@ function IncomeData({ allIncomeData, allIncomeLoading, refreshKey }) {
                   </div>
                 </div>
               }
+              style={cardStyle}
             >
               <List
                 dataSource={entry.incomeSourceDetails}
-                locale={{ emptyText: "No income sources" }}
+                locale={{ emptyText: "No income sources found." }}
                 renderItem={(item) => (
-                  <List.Item key={item._id} style={{ padding: "8px 0" }}>
+                  <List.Item key={item._id} style={{ padding: "10px 0" }}>
                     <List.Item.Meta
                       title={
                         <div
                           style={{
                             display: "flex",
-                            flexDirection: "row",
                             justifyContent: "space-between",
-                            gap: "10px",
+                            alignItems: "center",
                           }}
                         >
-                          <div>
-                            <Text strong>Source: {item.incomeSource}</Text>
-                          </div>
-                          <div style={{ display: "flex", gap: "5px" }}>
-                            <Popover trigger="hover" title="Update this entry">
+                          <Text strong style={{ fontSize: 16 }}>
+                            Source: {item.incomeSource}
+                          </Text>
+                          <div style={{ display: "flex", gap: 8 }}>
+                            <Popover title="Edit Entry">
                               <Button
                                 type="primary"
                                 icon={<EditOutlined />}
                                 onClick={() => viewEntry(item)}
                               />
                             </Popover>
-                            <Popover trigger="hover" title="Delete this entry">
+                            <Popover title="Delete Entry">
                               <Button
-                                type="primary"
-                                danger
                                 icon={<DeleteOutlined />}
-                                onClick={() => {
-                                  console.log(`clicked on ${item._id}`);
-                                }}
+                                danger
+                                onClick={() =>
+                                  console.log(`clicked on ${item._id}`)
+                                }
                               />
                             </Popover>
                           </div>
@@ -165,11 +180,12 @@ function IncomeData({ allIncomeData, allIncomeLoading, refreshKey }) {
                       description={
                         <>
                           <Text>
-                            Amount: KES. {item.amount.toLocaleString()}
+                            Amount:{" "}
+                            <strong>KES. {item.amount.toLocaleString()}</strong>
                           </Text>
                           <br />
                           <Text>
-                            Date of Reception:{" "}
+                            Date Received:{" "}
                             {format(new Date(item.dateOfReceipt), "PPPP")}
                           </Text>
                           <br />

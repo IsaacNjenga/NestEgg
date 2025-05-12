@@ -4,6 +4,7 @@ import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Card, Form, Input, Row, Col, Typography, Select } from "antd";
 import { incomeSources, frequency } from "../assets/data/data.js";
 import Swal from "sweetalert2";
+import axios from "axios";
 
 const initialValues = {
   amount: "",
@@ -18,14 +19,16 @@ function UpdateIncome({ modalContent }) {
   const [loading, setLoading] = useState(false);
   const [values, setValues] = useState(initialValues);
   const userId = user;
+  const detailId = modalContent?._id;
 
   React.useEffect(() => {
     if (modalContent) {
       const newValues = {
-        amount: modalContent.amount,
-        dateOfReceipt: modalContent.dateOfReceipt,
-        frequency: modalContent.frequency,
-        incomeSource: modalContent.incomeSource,
+        amount: modalContent?.amount,
+        dateOfReceipt: modalContent?.dateOfReceipt,
+        frequency: modalContent?.frequency,
+        incomeSource: modalContent?.incomeSource,
+        _id: detailId,
       };
       setValues(newValues);
       form.setFieldsValue(newValues);
@@ -36,16 +39,19 @@ function UpdateIncome({ modalContent }) {
     setLoading(true);
     try {
       const values = await form.validateFields();
-      const valuesData = { ...values, userId: user };
+      const valuesData = { ...values, userId: user, _id: detailId };
       console.log(valuesData);
-      //   const res = await axios.post("/income/update-income", valuesData);
-      //   if (res.data.success) {
-      //     Swal.fire({
-      //       icon: "success",
-      //       title: "Success",
-      //       text: "Your information has been updated successfully",
-      //     });
-      //   }
+      const res = await axios.put(
+        `/income/update-income/${detailId}`,
+        valuesData
+      );
+      if (res.data.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Your information has been updated successfully",
+        });
+      }
     } catch (error) {
       console.log(error);
       const errorMessage =
@@ -140,15 +146,8 @@ function UpdateIncome({ modalContent }) {
 
           <Form.Item>
             <Button type="primary" loading={loading} htmlType="submit">
-              {loading ? "Submitting..." : "Submit"}
+              {loading ? "Updating..." : "Update"}
             </Button>
-          </Form.Item>
-          <Form.Item shouldUpdate noStyle>
-            {() => (
-              <Typography.Paragraph>
-                <pre>{JSON.stringify(form.getFieldsValue(), null, 2)}</pre>
-              </Typography.Paragraph>
-            )}
           </Form.Item>
         </Form>
       </div>
