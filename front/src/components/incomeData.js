@@ -10,7 +10,11 @@ import {
   Popover,
   Popconfirm,
 } from "antd";
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  PlusCircleOutlined,
+} from "@ant-design/icons";
 import axios from "axios";
 import Swal from "sweetalert2";
 import UpdateIncomeModal from "./updateIncomeModal";
@@ -98,7 +102,13 @@ function IncomeData({ allIncomeData, allIncomeLoading, refreshKey }) {
                       Date: {format(new Date(entry.timestamp), "PPPP")}
                     </Text>
                   </div>
-                  <div>
+                  <div style={{ display: "flex", gap: "5px" }}>
+                    <Button
+                      type="dashed"
+                      icon={<PlusCircleOutlined />}
+                      shape="circle"
+                    />
+
                     <Popconfirm
                       title="Are you sure?"
                       description="This action cannot be undone!"
