@@ -1,90 +1,93 @@
 export const incomeSources = [
-  { value: "salary", label: "Salary" },
-  { value: "selfEmployment", label: "Self-Employment" },
-  { value: "businessIncome", label: "Business Income" },
-  { value: "rentalIncome", label: "Rental Income" },
-  { value: "royalties", label: "Royalties" },
-  { value: "gifts", label: "Gifts" },
-  { value: "freelancing", label: "Freelancing" },
-  { value: "benefits", label: "Benefits" },
-  { value: "realEstateInvestments", label: "Real Estate Investments" },
-  { value: "financialInvestments", label: "Financial Investments" },
-  { value: "sideHustle", label: "Side Hustle" },
-  { value: "interest", label: "Interest" },
+  { value: "Salary", label: "Salary" },
+  { value: "Self-Employment", label: "Self-Employment" },
+  { value: "Business Income", label: "Business Income" },
+  { value: "Rental Income", label: "Rental Income" },
+  { value: "Royalties", label: "Royalties" },
+  { value: "Gifts", label: "Gifts" },
+  { value: "Freelancing", label: "Freelancing" },
+  { value: "Benefits", label: "Benefits" },
+  { value: "Real Estate Investments", label: "Real Estate Investments" },
+  { value: "Financial Investments", label: "Financial Investments" },
+  { value: "Side Hustle", label: "Side Hustle" },
+  { value: "Interest", label: "Interest" },
 ];
 
 export const frequency = [
-  { value: "hourly", label: "Hourly" },
-  { value: "daily", label: "Daily" },
-  { value: "weekly", label: "Weekly" },
-  { value: "biWeekly", label: "Bi-Weekly" },
-  { value: "semiMonthly", label: "Semi-Monthly" },
-  { value: "monthly", label: "Monthly" },
-  { value: "semiAnnually", label: "SemiAnnually" },
-  { value: "annually", label: "Annually" },
-  { value: "commission", label: "Commission" },
-  { value: "bonus", label: "Bonus" },
+  { value: "Hourly", label: "Hourly" },
+  { value: "Daily", label: "Daily" },
+  { value: "Weekly", label: "Weekly" },
+  { value: "Bi-Weekly", label: "Bi-Weekly" },
+  { value: "Semi-Monthly", label: "Semi-Monthly" },
+  { value: "Monthly", label: "Monthly" },
+  { value: "Semi-Annually", label: "Semi-Annually" },
+  { value: "Annually", label: "Annually" },
+  { value: "Commission", label: "Commission" },
+  { value: "Bonus", label: "Bonus" },
 ];
 
 export const housingCategory = [
-  { value: "rent", label: "Rent" },
-  { value: "propertyTaxes", label: "Property Taxes" },
-  { value: "rentersInsurance", label: "Renter's Insurance" },
-  { value: "maintenanceAndRepair", label: "Maintenance & Repair" },
+  { value: "Rent", label: "Rent" },
+  { value: "Property Taxes", label: "Property Taxes" },
+  { value: "Renter's Insurance", label: "Renter's Insurance" },
+  { value: "Maintenance & Repair", label: "Maintenance & Repair" },
 ];
 export const foodCategory = [
-  { value: "groceries", label: "Groceries & Shopping" },
-  { value: "diningout", label: "Dining Out" },
-  { value: "takeout", label: "Takeout/Delivery" },
+  { value: "Groceries & Shopping", label: "Groceries & Shopping" },
+  { value: "Dining Out", label: "Dining Out" },
+  { value: "Takeout", label: "Takeout/Delivery" },
 ];
 export const transportationCategory = [
-  { value: "publicTransport", label: "Public Transport" },
-  { value: "carInsurance", label: "Car Insurance" },
-  { value: "carPayments", label: "Car Payments" },
-  { value: "maintenanceAndRepairs", label: "Maintenance & Repairs" },
-  { value: "parking", label: "Parking/Tolls" },
-  { value: "fuel", label: "Fuel" },
+  { value: "Public Transport", label: "Public Transport" },
+  { value: "Car Insurance", label: "Car Insurance" },
+  { value: "Car Payments", label: "Car Payments" },
+  { value: "Maintenance & Repairs", label: "Maintenance & Repairs" },
+  { value: "Parking/Tolls", label: "Parking/Tolls" },
+  { value: "Fuel", label: "Fuel" },
 ];
 export const personalCareCategory = [
-  { value: "toiletries", label: "Toiletries" },
-  { value: "hairAndStyling", label: "Haircuts/Styling" },
-  { value: "gymMembership", label: "Gym Membership" },
-  { value: "clothing", label: "Clothing" },
-  { value: "education", label: "Education/Tuition" },
-  { value: "other", label: "Other" },
+  { value: "Toiletries", label: "Toiletries" },
+  { value: "Hair & Styling", label: "Haircuts & Styling" },
+  { value: "Gym Membership", label: "Gym Membership" },
+  { value: "Clothing", label: "Clothing" },
+  { value: "Education/Tuition", label: "Education/Tuition" },
+  { value: "Other", label: "Other" },
 ];
 export const healthMedicalCategory = [
-  { value: "healthInsurance", label: "HealthInsurance" },
-  { value: "medication", label: "Medication" },
-  { value: "consultationsAndVisits", label: "Consultations/Visits" },
+  { value: "Health Insurance", label: "Health Insurance" },
+  { value: "Medication", label: "Medication" },
+  { value: "Consultations & Visits", label: "Consultations & Visits" },
 ];
 export const insuranceCategory = [
-  { value: "lifeInsurance", label: "Life Insurance" },
-  { value: "disabilityInsurance", label: "Disability Insurance" },
+  { value: "Life Insurance", label: "Life Insurance" },
+  { value: "Disability Insurance", label: "Disability Insurance" },
 ];
 export const savingsInvestmentsCategory = [
   {
-    value: "emergencyFundConstributions",
+    value: "Emergency Fund Contributions",
     label: "Emergency Fund Contributions",
   },
   {
-    value: "investmentAccountContributions",
+    value: "Investment Account Contributions",
     label: "Investment Account Contributions",
   },
 ];
 export const entertainmentCategory = [
-  { value: "movies", label: "Music/Movies/Concerts/Events" },
-  { value: "hobbies", label: "Hobbies" },
-  { value: "vacations", label: "Vacations/Outing" },
+  {
+    value: "Music/Movies/Concerts/Events",
+    label: "Music/Movies/Concerts/Events",
+  },
+  { value: "Hobbies", label: "Hobbies" },
+  { value: "Vacations/Outing", label: "Vacations/Outing" },
 ];
 export const debtpaymentsCategory = [
-  { value: "creditPayments", label: "Credit Card Payments" },
-  { value: "personalLoan", label: "Personal Loan Payments" },
-  { value: "bankLoan", label: "Bank Loan Payments" },
+  { value: "Credit Card Payments", label: "Credit Card Payments" },
+  { value: "Personal Loan Payments", label: "Personal Loan Payments" },
+  { value: "Bank Loan Payments", label: "Bank Loan Payments" },
 ];
 export const miscellaneousCategory = [
-  { value: "petCare", label: "Pet Care" },
-  { value: "donations", label: "Donations" },
-  { value: "bankFees", label: "Bank Fees" },
-  { value: "other", label: "Other" },
+  { value: "Pet Care", label: "Pet Care" },
+  { value: "Donations", label: "Donations" },
+  { value: "Bank Fees", label: "Bank Fees" },
+  { value: "Other", label: "Other" },
 ];

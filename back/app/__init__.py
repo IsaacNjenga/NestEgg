@@ -25,15 +25,15 @@ def create_app():
 
     # Register Blueprints (routes)
     from .routes.users import users_bp
-
     app.register_blueprint(users_bp, url_prefix="/nestegg/users")
 
     from .routes.passwordChange import auth_bp
-
     app.register_blueprint(auth_bp, url_prefix="/nestegg/auth")
 
     from .routes.cloudinary import cloudinary_bp
-
     app.register_blueprint(cloudinary_bp, url_prefix="/nestegg/image")
+
+    from .routes.income import income_bp
+    app.register_blueprint(income_bp,url_prefix='/nestegg/income')
 
     return app

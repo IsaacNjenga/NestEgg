@@ -1,21 +1,40 @@
 // AddIncome.jsx
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Card, Form, Input, Row, Col, Typography, Select } from "antd";
 import { incomeSources, frequency } from "../assets/data/data.js";
 import Swal from "sweetalert2";
+import { UserContext } from "../App.js";
+import axios from "axios";
 
 function AddIncome() {
   const [form] = Form.useForm();
+  const { user } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
-
-
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
-      const allValues = await form.validateFields();
-      console.log(allValues);
+      const values = await form.validateFields();
+      const valuesData = { ...values, userId: user };
+      console.log(valuesData);
+      const res = await axios.post("/income/create-income", valuesData);
+      if (res.data.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Success",
+          text: "Your information has been saved successfully",
+        });
+      }
+      //const incomeSources = values.incomeSourceDetails || [];
+
+      // Ensure amounts are numbers, not strings
+      // const totalAmount = incomeSources.reduce((total, entry) => {
+      //   return total + (parseFloat(entry.amount) || 0);
+      // }, 0);
+
+      // console.log("Submitted values:", values);
+      // console.log("Total Amount:", totalAmount);
     } catch (error) {
       console.log(error);
       const errorMessage =
@@ -51,126 +70,80 @@ function AddIncome() {
         style={{ maxWidth: 900, margin: "2rem auto" }}
         onFinish={handleSubmit}
       >
-        <Form.List name="Source Of Income">
+        <Form.List name="incomeSourceDetails">
           {(fields, { add, remove }) => (
             <>
               {fields.map((field, index) => (
-                <Card
-                  key={field.key}
-                  title={`Source ${index + 1}`}
-                  style={{ marginBottom: 24, borderRadius: 12 }}
-                  extra={
-                    fields.length > 1 && (
+                <Card>
+                  <Row gutter={16} key={field.key} align="middle">
+                    <Col span={10}>
+                      <Form.Item
+                        label={`Income Source ${index + 1}`}
+                        name={[field.name, "incomeSource"]}
+                        rules={[{ required: true, message: "Select source" }]}
+                      >
+                        <Select placeholder="Select source">
+                          {incomeSources.map((i) => (
+                            <Select.Option key={i.value} value={i.value}>
+                              {i.label}
+                            </Select.Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                    </Col>
+
+                    <Col span={10}>
+                      <Form.Item
+                        label="Amount"
+                        name={[field.name, "amount"]}
+                        rules={[{ required: true, message: "Enter amount" }]}
+                      >
+                        <Input placeholder="e.g. 1000" />
+                      </Form.Item>
+                    </Col>
+
+                    <Col span={10}>
+                      <Form.Item
+                        label="Frequency"
+                        name={[field.name, "frequency"]}
+                        rules={[
+                          { required: true, message: "Select frequency" },
+                        ]}
+                      >
+                        <Select placeholder="Select frequency">
+                          {frequency.map((f) => (
+                            <Select.Option key={f.value} value={f.value}>
+                              {f.label}
+                            </Select.Option>
+                          ))}
+                        </Select>
+                      </Form.Item>
+                    </Col>
+
+                    <Col span={10}>
+                      <Form.Item
+                        label="Receipt Date"
+                        name={[field.name, "dateOfReceipt"]}
+                      >
+                        <Input type="date" />
+                      </Form.Item>
+                    </Col>
+
+                    <Col span={4}>
                       <Button
                         danger
                         type="text"
                         icon={<CloseOutlined />}
                         onClick={() => remove(field.name)}
                       />
-                    )
-                  }
-                >
-                  <Form.List
-                    name={[field.name, `incomeSourceDetails${index + 1}`]}
-                  >
-                    {(subFields, subOpt) => (
-                      <>
-                        {subFields.map((subField) => (
-                          <Row gutter={16} key={subField.key} align="middle">
-                            {" "}
-                            <Col span={10}>
-                              <Form.Item
-                                label="Income Source"
-                                name={[subField.name, "incomeSource"]}
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Please select a source",
-                                  },
-                                ]}
-                              >
-                                <Select placeholder="Select source">
-                                  {incomeSources.map((i) => (
-                                    <Select.Option
-                                      key={i.value}
-                                      value={i.value}
-                                    >
-                                      {i.label}
-                                    </Select.Option>
-                                  ))}
-                                </Select>
-                              </Form.Item>
-                            </Col>
-                            <Col span={10}>
-                              <Form.Item
-                                label="Amount"
-                                name={[subField.name, "amount"]}
-                                rules={[
-                                  { required: true, message: "Enter amount" },
-                                ]}
-                              >
-                                <Input placeholder="e.g. 1000" />
-                              </Form.Item>
-                            </Col>
-                            <Col span={10}>
-                              <Form.Item
-                                label="Frequency"
-                                name={[subField.name, "frequency"]}
-                                rules={[
-                                  {
-                                    required: true,
-                                    message: "Select frequency",
-                                  },
-                                ]}
-                              >
-                                <Select placeholder="Select frequency">
-                                  {frequency.map((f) => (
-                                    <Select.Option
-                                      key={f.value}
-                                      value={f.value}
-                                    >
-                                      {f.label}
-                                    </Select.Option>
-                                  ))}
-                                </Select>
-                              </Form.Item>
-                            </Col>
-                            <Col span={10}>
-                              <Form.Item
-                                label="Receipt Date"
-                                name={[subField.name, "dateOfReceipt"]}
-                              >
-                                <Input type="date" />
-                              </Form.Item>
-                            </Col>
-                            <Col span={4}>
-                              <Button
-                                danger
-                                type="text"
-                                icon={<CloseOutlined />}
-                                onClick={() => subOpt.remove(subField.name)}
-                              />
-                            </Col>
-                          </Row>
-                        ))}
-                        <Form.Item>
-                          <Button
-                            type="dashed"
-                            icon={<PlusOutlined />}
-                            onClick={() => subOpt.add()}
-                          >
-                            Add Income Detail
-                          </Button>
-                        </Form.Item>
-                      </>
-                    )}
-                  </Form.List>
+                    </Col>
+                  </Row>
                 </Card>
               ))}
+
               <Form.Item>
                 <Button
                   type="dashed"
-                  block
                   icon={<PlusOutlined />}
                   onClick={() => add()}
                 >
