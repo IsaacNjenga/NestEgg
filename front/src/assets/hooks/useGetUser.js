@@ -45,7 +45,7 @@ function UseGetUser() {
   return {
     userData,
     userDataLoading,
-    refreshKey: () => setRefreshKey((prev) => prev + 1),
+    refresh: () => setRefreshKey((prev) => prev + 1),
   };
 }
 

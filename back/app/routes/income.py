@@ -3,6 +3,7 @@ from ..controllers.incomeController import (
     add_income,
     get_all_incomes,
     update_income,
+    update_income_source,
     delete_income,
     delete_income_detail,
 )
@@ -24,11 +25,18 @@ def get_user_incomes(user_id):
     return get_all_incomes(user_id)
 
 
-@income_bp.route("/update-income/<detail_id>", methods=["PUT", "OPTIONS"])
-def updating_income(detail_id):
+@income_bp.route("/update-income/<income_id>", methods=["PUT", "OPTIONS"])
+def updating_income(income_id):
     if request.method == "OPTIONS":
         return "", 200
-    return update_income(detail_id)
+    return update_income(income_id)
+
+
+@income_bp.route("/update-income-source/<detail_id>", methods=["PUT", "OPTIONS"])
+def updating_income_source(detail_id):
+    if request.method == "OPTIONS":
+        return "", 200
+    return update_income_source(detail_id)
 
 
 @income_bp.route("/delete-income/<income_id>", methods=["DELETE", "OPTIONS"])
@@ -38,8 +46,10 @@ def remove_income(income_id):
     return delete_income(income_id)
 
 
-@income_bp.route("/delete_income_detail/<detail_id>", methods=["DELETE", "OPTIONS"])
-def remove_income_detail(detail_id):
+@income_bp.route(
+    "/delete-income-source/<detail_id>/<income_id>", methods=["DELETE", "OPTIONS"]
+)
+def remove_income_detail(detail_id, income_id):
     if request.method == "OPTIONS":
         return "", 200
-    return delete_income_detail(detail_id)
+    return delete_income_detail(detail_id, income_id)

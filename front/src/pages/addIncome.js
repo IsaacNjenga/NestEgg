@@ -6,19 +6,22 @@ import { incomeSources, frequency } from "../assets/data/data.js";
 import Swal from "sweetalert2";
 import { UserContext } from "../App.js";
 import axios from "axios";
+import UseGetAllIncome from "../assets/hooks/useGetAllIncome.js";
 
 function AddIncome() {
   const [form] = Form.useForm();
   const { user } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
+  const { refresh } = UseGetAllIncome();
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
       const values = await form.validateFields();
       const valuesData = { ...values, userId: user };
-      console.log(valuesData);
+      // console.log(valuesData);
       const res = await axios.post("/income/create-income", valuesData);
+      refresh();
       if (res.data.success) {
         Swal.fire({
           icon: "success",
@@ -26,15 +29,6 @@ function AddIncome() {
           text: "Your information has been saved successfully",
         });
       }
-      //const incomeSources = values.incomeSourceDetails || [];
-
-      // Ensure amounts are numbers, not strings
-      // const totalAmount = incomeSources.reduce((total, entry) => {
-      //   return total + (parseFloat(entry.amount) || 0);
-      // }, 0);
-
-      // console.log("Submitted values:", values);
-      // console.log("Total Amount:", totalAmount);
     } catch (error) {
       console.log(error);
       const errorMessage =
@@ -45,6 +39,7 @@ function AddIncome() {
       Swal.fire({ icon: "error", title: "Error", text: errorMessage });
     } finally {
       setLoading(false);
+      form.resetFields();
     }
   };
 
@@ -74,7 +69,7 @@ function AddIncome() {
           {(fields, { add, remove }) => (
             <>
               {fields.map((field, index) => (
-                <Card>
+                <Card key={field.key}>
                   <Row gutter={16} key={field.key} align="middle">
                     <Col span={10}>
                       <Form.Item

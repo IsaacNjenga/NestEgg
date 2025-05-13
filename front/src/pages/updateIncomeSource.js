@@ -13,13 +13,13 @@ const initialValues = {
   incomeSource: "",
 };
 
-function UpdateIncome({ modalContent, setOpenAddModal }) {
+function UpdateIncomeSource({ modalContent }) {
   const [form] = Form.useForm();
   const { user } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
   const [values, setValues] = useState(initialValues);
+  const detailId = modalContent?._id;
   const { refresh } = UseGetAllIncome();
-  const incomeId = modalContent?._id;
 
   React.useEffect(() => {
     if (modalContent) {
@@ -32,7 +32,7 @@ function UpdateIncome({ modalContent, setOpenAddModal }) {
         incomeSource: modalContent?.incomeSource
           ? modalContent?.incomeSource
           : "",
-        _id: incomeId,
+        _id: detailId,
       };
       setValues(newValues);
       form.setFieldsValue(newValues);
@@ -43,21 +43,19 @@ function UpdateIncome({ modalContent, setOpenAddModal }) {
     setLoading(true);
     try {
       const values = await form.validateFields();
-      const valuesData = { ...values, userId: user, _id: incomeId };
-      //console.log(valuesData);
+      const valuesData = { ...values, userId: user, _id: detailId };
+      console.log(valuesData);
       const res = await axios.put(
-        `/income/update-income/${incomeId}`,
+        `/income/update-income-source/${detailId}`,
         valuesData
       );
       if (res.data.success) {
-        setOpenAddModal(false);
-        refresh(); // ✅ must be after modal closes
-        console.log("Called refresh()");
         Swal.fire({
           icon: "success",
           title: "Success",
           text: "Your information has been updated successfully",
         });
+        refresh();
       }
     } catch (error) {
       console.log(error);
@@ -91,7 +89,7 @@ function UpdateIncome({ modalContent, setOpenAddModal }) {
             marginBottom: 10,
           }}
         >
-          Add Income
+          Update Income
         </Typography.Title>
         <Form
           form={form}
@@ -153,7 +151,7 @@ function UpdateIncome({ modalContent, setOpenAddModal }) {
 
           <Form.Item>
             <Button type="primary" loading={loading} htmlType="submit">
-              {loading ? "Adding..." : "Add"}
+              {loading ? "Updating..." : "Update"}
             </Button>
           </Form.Item>
         </Form>
@@ -162,4 +160,4 @@ function UpdateIncome({ modalContent, setOpenAddModal }) {
   );
 }
 
-export default UpdateIncome;
+export default UpdateIncomeSource;

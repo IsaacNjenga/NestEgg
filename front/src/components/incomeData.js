@@ -18,6 +18,8 @@ import {
 import axios from "axios";
 import Swal from "sweetalert2";
 import UpdateIncomeModal from "./updateIncomeModal";
+import AddIncomeModal from "./addIncomeModal";
+import UseGetAllIncome from "../assets/hooks/useGetAllIncome";
 
 const { Title, Text } = Typography;
 
@@ -41,24 +43,59 @@ const pageStyle = {
   fontFamily: "Roboto, sans-serif",
 };
 
-function IncomeData({ allIncomeData, allIncomeLoading, refreshKey }) {
+function IncomeData() {
   const [openDelete, setOpenDelete] = useState(null);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const [modalContent, setModalContent] = useState(null);
+  const [openAddModal, setOpenAddModal] = useState(false);
+  const { allIncomeData, allIncomeLoading, refresh } = UseGetAllIncome();
 
   const handleFieldDelete = async (id) => {
-    // console.log(id);
     setConfirmLoading(true);
     try {
-      await axios.delete(`income/delete-income/${id}`);
-      Swal.fire({
-        icon: "success",
-        title: "Deleted",
-      });
-      refreshKey();
+      const res = await axios.delete(`income/delete-income/${id}`);
+
+      if (res.data.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Deleted",
+        });
+        refresh();
+      }
     } catch (error) {
+      console.log(error);
+      const errorMessage =
+        error.response && error.response.data && error.response.data.error
+          ? error.response.data.error
+          : "An unexpected error occurred. Please try again later.";
+
+      Swal.fire({
+        icon: "warning",
+        title: "Error",
+        text: errorMessage,
+      });
+    } finally {
+      setConfirmLoading(false);
+    }
+  };
+
+  const handleEntryDelete = async (item, entry) => {
+    setConfirmLoading(true);
+    try {
+      const detailId = item._id;
+      const incomeId = entry._id;
+
+      const res = await axios.delete(
+        `income/delete-income-source/${detailId}/${incomeId}`
+      );
+      if (res.data.success) {
+        Swal.fire({ icon: "success", title: "Deleted!" });
+        refresh();
+      }
+    } catch (error) {
+      console.log(error);
       const errorMessage =
         error.response && error.response.data && error.response.data.error
           ? error.response.data.error
@@ -88,13 +125,27 @@ function IncomeData({ allIncomeData, allIncomeLoading, refreshKey }) {
     }, 100);
   };
 
+  const totalAmount = allIncomeData
+    .flatMap((entry) => entry.incomeSourceDetails) // flatten into a single array
+    .reduce((total, item) => {
+      return total + (parseFloat(item.amount) || 0);
+    }, 0);
+
+  const addSource = (item) => {
+    setOpenAddModal(true);
+    setLoading(true);
+    setModalContent(item);
+    setTimeout(() => {
+      setLoading(false);
+    }, 100);
+  };
+
   return (
     <>
       <div style={pageStyle}>
         <Title level={3} style={headerStyle}>
           All Your Income Entries
         </Title>
-
         {allIncomeLoading ? (
           <Space
             direction="vertical"
@@ -117,14 +168,17 @@ function IncomeData({ allIncomeData, allIncomeLoading, refreshKey }) {
                   }}
                 >
                   <Text type="secondary" style={{ fontSize: 13 }}>
-                    {format(new Date(entry.timestamp), "PPPP")}
+                    {format(new Date(entry?.createdAt), "PPPP")}
                   </Text>
                   <div style={{ display: "flex", gap: 8 }}>
                     <Button
                       type="dashed"
                       icon={<PlusCircleOutlined />}
                       shape="circle"
-                      title="Add Income"
+                      title="Add Another Income Source"
+                      onClick={() => {
+                        addSource(entry);
+                      }}
                     />
                     <Popconfirm
                       title="Are you sure?"
@@ -132,6 +186,7 @@ function IncomeData({ allIncomeData, allIncomeLoading, refreshKey }) {
                       onConfirm={() => handleFieldDelete(entry._id)}
                       okButtonProps={{ loading: confirmLoading }}
                       onCancel={handleDeleteCancel}
+                      open={openDelete}
                     >
                       <Button type="primary" danger icon={<DeleteOutlined />} />
                     </Popconfirm>
@@ -166,13 +221,15 @@ function IncomeData({ allIncomeData, allIncomeLoading, refreshKey }) {
                               />
                             </Popover>
                             <Popover title="Delete Entry">
-                              <Button
-                                icon={<DeleteOutlined />}
-                                danger
-                                onClick={() =>
-                                  console.log(`clicked on ${item._id}`)
-                                }
-                              />
+                              <Popconfirm
+                                title="Are you sure?"
+                                description="This will delete this entry permanently"
+                                onConfirm={() => handleEntryDelete(item, entry)}
+                                okButtonProps={{ loading: confirmLoading }}
+                                onCancel={handleDeleteCancel}
+                              >
+                                <Button icon={<DeleteOutlined />} danger />
+                              </Popconfirm>
                             </Popover>
                           </div>
                         </div>
@@ -199,11 +256,18 @@ function IncomeData({ allIncomeData, allIncomeLoading, refreshKey }) {
             </Card>
           ))
         )}
+        Total:{totalAmount}
       </div>
       <UpdateIncomeModal
         loading={loading}
         openUpdateModal={openUpdateModal}
         setOpenUpdateModal={setOpenUpdateModal}
+        modalContent={modalContent}
+      />
+      <AddIncomeModal
+        loading={loading}
+        setOpenAddModal={setOpenAddModal}
+        openAddModal={openAddModal}
         modalContent={modalContent}
       />
     </>

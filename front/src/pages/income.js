@@ -1,11 +1,9 @@
 import React from "react";
-import UseGetAllIncome from "../assets/hooks/useGetAllIncome";
 import AddIncome from "./addIncome";
 import AddExpenses from "./addExpenses";
 import IncomeData from "../components/incomeData.js";
 
 function Income() {
-  const { allIncomeData, allIncomeLoading, refreshKey } = UseGetAllIncome();
   return (
     <>
       Expenses Add, edit, and delete income and expense entries Categorization
@@ -19,11 +17,7 @@ function Income() {
       calculating (Housing Expenses / Total Income) * 100%.
       {/* <AddIncome /> */}
       {/* <AddExpenses /> */}
-      <IncomeData
-        allIncomeData={allIncomeData}
-        allIncomeLoading={allIncomeLoading}
-        refreshKey={refreshKey}
-      />
+      <IncomeData />
     </>
   );
 }

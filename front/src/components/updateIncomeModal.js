@@ -1,6 +1,6 @@
 import { Modal } from "antd";
 import React from "react";
-import UpdateIncome from "../pages/updateIncome";
+import UpdateIncomeSource from "../pages/updateIncomeSource";
 
 function UpdateIncomeModal({
   openUpdateModal,
@@ -18,7 +18,7 @@ function UpdateIncomeModal({
         width={850}
         style={{ maxWidth: "95vw" }}
       >
-        <UpdateIncome modalContent={modalContent} />
+        <UpdateIncomeSource modalContent={modalContent} />
       </Modal>
     </>
   );

@@ -17,6 +17,7 @@ function UseGetAllIncome() {
         console.warn("No user ID found, skipping request.");
         return;
       }
+      //console.log("Fetching incomes... refreshKey:", refreshKey);
       try {
         const res = await axios.get(`income/get-income/${userId}`);
         if (res.data.success) {
@@ -45,7 +46,7 @@ function UseGetAllIncome() {
   return {
     allIncomeData,
     allIncomeLoading,
-    refreshKey: () => setRefreshKey((prev) => prev + 1),
+    refresh: () => setRefreshKey((prev) => prev + 1),
   };
 }
 
