@@ -21,19 +21,19 @@ function EndDate({ range, startDate, fieldName }) {
       ? startDate.clone().add(rangeToDays[range], "days")
       : null;
 
-  const handleChange = (name, value) => {
-    const selectedDate = value.$d;
-    const formattedSelectedDate = format(new Date(selectedDate), "yyyy-MM-dd");
-    const setEndDate = endDate.$d;
-    const formattedEndDate = format(new Date(setEndDate), "yyyy-MM-dd");
-    console.log(formattedEndDate);
-    if (formattedSelectedDate !== formattedEndDate) {
-      console.warn("Dates are not matching");
-      return;
-    } else {
-      console.log("Good match");
-    }
-  };
+  // const handleChange = (name, value) => {
+  //   const selectedDate = value.$d;
+  //   const formattedSelectedDate = format(new Date(selectedDate), "yyyy-MM-dd");
+  //   const setEndDate = endDate.$d;
+  //   const formattedEndDate = format(new Date(setEndDate), "yyyy-MM-dd");
+  //   console.log(formattedEndDate);
+  //   if (formattedSelectedDate !== formattedEndDate) {
+  //     console.warn("Dates are not matching");
+  //     return;
+  //   } else {
+  //     console.log("Good match");
+  //   }
+  // };
 
   return (
     <>
@@ -72,10 +72,10 @@ function EndDate({ range, startDate, fieldName }) {
           >
             <DatePicker
               value={endDate}
-              onChange={(value) => handleChange(fieldName, value)}
+              // onChange={(value) => handleChange(fieldName, value)}
             />
-            <p>({endDate.format("YYYY-MM-DD")})</p>
           </Form.Item>
+          {/* <p>({endDate.format("YYYY-MM-DD")})</p> */}
         </div>
       ) : null}
     </>

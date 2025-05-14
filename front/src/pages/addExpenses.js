@@ -94,7 +94,7 @@ const ExpenseItem = ({
   expenseFields,
   categoryMap,
   frequency,
-  key,
+  
 }) => {
   const [range, setRange] = useState("monthly");
   const [startDate, setStartDate] = useState(null);
@@ -142,7 +142,7 @@ const ExpenseItem = ({
           </Form.Item>
         </Col>
 
-        <Col xs={24} md={6}>
+        <Col xs={24} md={8}>
           <Form.Item
             label="Expense"
             name={[field.name, "expenseName"]}
