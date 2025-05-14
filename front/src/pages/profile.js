@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { CloseOutlined, DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import {
   Button,
   Card,
@@ -16,6 +16,7 @@ import ImageUploads from "../components/imageUploads";
 import axios from "axios";
 import { UserContext } from "../App";
 import UseGetUser from "../assets/hooks/useGetUser";
+import { useNavigate } from "react-router-dom";
 
 const inputStyle = {
   backgroundColor: "#fff",
@@ -51,6 +52,7 @@ const initialValues = {
 
 function Profile() {
   const [form] = Form.useForm();
+  const navigate = useNavigate();
   const { userData, userDataLoading } = UseGetUser();
   const [values, setValues] = useState(initialValues);
   const [loading, setLoading] = useState(false);
@@ -170,6 +172,21 @@ function Profile() {
           padding: "15px",
           borderRadius: 12,
         }}
+        title={
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row-reverse",
+            }}
+          >
+            <Button
+              type="primary"
+              danger
+              icon={<CloseOutlined />}
+              onClick={() => navigate("/")}
+            />
+          </div>
+        }
       >
         <Divider style={{ borderColor: "#4f46e5" }}>
           <div
@@ -348,7 +365,6 @@ function Profile() {
             <Button
               block
               danger
-              type="primary"
               onClick={handleProfileDelete}
               icon={<DeleteOutlined />}
               loading={deleteLoading}
