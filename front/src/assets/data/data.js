@@ -14,6 +14,8 @@ export const incomeSources = [
 ];
 
 export const frequency = [
+  { value: "Rare", label: "Rare" },
+  { value: "Occasional", label: "Occasional" },
   { value: "Hourly", label: "Hourly" },
   { value: "Daily", label: "Daily" },
   { value: "Weekly", label: "Weekly" },

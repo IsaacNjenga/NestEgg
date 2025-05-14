@@ -1,8 +1,9 @@
 import React from "react";
 import { DatePicker, Form } from "antd";
 import dayjs from "dayjs";
+import { format } from "date-fns";
 
-function StartDate({ fieldName, startDate, setStartDate, range }) {
+function StartDate({ fieldName, startDate, setStartDate }) {
   const disabledDate = (current) => {
     const today = dayjs();
     return (

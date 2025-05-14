@@ -18,7 +18,10 @@ function UpdateIncomeModal({
         width={850}
         style={{ maxWidth: "95vw" }}
       >
-        <UpdateIncomeSource modalContent={modalContent} />
+        <UpdateIncomeSource
+          modalContent={modalContent}
+          setOpenUpdateModal={setOpenUpdateModal}
+        />
       </Modal>
     </>
   );

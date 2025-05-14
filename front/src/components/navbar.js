@@ -23,6 +23,7 @@ function Navbar() {
     //{ label: "Home", path: "/" },
     { label: "Dashboard", path: "/dashboard" },
     { label: "Income", path: "/income" },
+    { label: "Expenses", path: "/expenses" },
   ];
 
   const toggleDrawer = () => setDrawerVisible(!drawerVisible);

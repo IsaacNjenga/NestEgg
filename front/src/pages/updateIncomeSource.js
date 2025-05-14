@@ -13,7 +13,7 @@ const initialValues = {
   incomeSource: "",
 };
 
-function UpdateIncomeSource({ modalContent }) {
+function UpdateIncomeSource({ modalContent, setOpenUpdateModal }) {
   const [form] = Form.useForm();
   const { user } = useContext(UserContext);
   const [loading, setLoading] = useState(false);
@@ -55,6 +55,7 @@ function UpdateIncomeSource({ modalContent }) {
           title: "Success",
           text: "Your information has been updated successfully",
         });
+        setOpenUpdateModal(false);
         refresh();
       }
     } catch (error) {

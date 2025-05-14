@@ -17,71 +17,209 @@ import {
 import StartDate from "../components/startDate";
 import EndDate from "../components/endDate";
 import Swal from "sweetalert2";
+//import { format } from "date-fns";
+import { useWatch } from "antd/es/form/Form";
 
-const fieldss = [
-  { key: 1, field: "Housing", value: "housing", category: housingCategory },
-  { key: 2, field: "Food", value: "food", category: foodCategory },
+const categoryMap = {
+  Housing: housingCategory,
+  Food: foodCategory,
+  Transportation: transportationCategory,
+  "Personal Care": personalCareCategory,
+  "Health & Medical": healthMedicalCategory,
+  Insurance: insuranceCategory,
+  "Savings & Investments": savingsInvestmentsCategory,
+  Entertainment: entertainmentCategory,
+  "Debt Payments": debtpaymentsCategory,
+  "Misc. & Other": miscellaneousCategory,
+};
+
+const expenseFields = [
+  { key: 1, field: "Housing", value: "Housing", category: housingCategory },
+  { key: 2, field: "Food", value: "Food", category: foodCategory },
   {
     key: 3,
     field: "Transportation",
-    value: "transportation",
+    value: "Transportation",
     category: transportationCategory,
   },
   {
     key: 4,
     field: "Personal Care",
-    value: "personalCare",
+    value: "Personal Care",
     category: personalCareCategory,
   },
   {
     key: 5,
     field: "Health & Medical",
-    value: "healthMedical",
+    value: "Health & Medical",
     category: healthMedicalCategory,
   },
   {
     key: 6,
     field: "Insurance",
-    value: "insurance",
+    value: "Insurance",
     category: insuranceCategory,
   },
   {
     key: 7,
     field: "Savings & Investments",
-    value: "savingsInvestments",
+    value: "Savings & Investments",
     category: savingsInvestmentsCategory,
   },
   {
     key: 8,
     field: "Entertainment",
-    value: "entertainment",
+    value: "Entertainment",
     category: entertainmentCategory,
   },
   {
     key: 9,
     field: "Debt Payments",
-    value: "debtPayments",
+    value: "Debt Payments",
     category: debtpaymentsCategory,
   },
   {
     key: 10,
     field: "Misc. & Other",
-    value: "miscellaneous",
+    value: "Misc. & Other",
     category: miscellaneousCategory,
   },
 ];
 
-const AddExpenses = () => {
-  const [form] = Form.useForm();
+const ExpenseItem = ({
+  field,
+  remove,
+  form,
+  expenseFields,
+  categoryMap,
+  frequency,
+  key,
+}) => {
   const [range, setRange] = useState("monthly");
   const [startDate, setStartDate] = useState(null);
+
+  const selectedCategory = useWatch(
+    ["expensesDetails", field.name, "category"],
+    form
+  );
+
+  const expenseOptions = categoryMap[selectedCategory] || [];
+
+  return (
+    <Card
+      key={field.key}
+      style={{
+        marginBottom: 18,
+        borderRadius: 12,
+        boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+      }}
+      title={`Expense Entry ${field.name + 1}`}
+      extra={
+        <Button
+          type="text"
+          danger
+          icon={<CloseOutlined />}
+          onClick={() => remove(field.name)}
+        />
+      }
+    >
+      <Row gutter={16} align="middle">
+        <Col xs={24} md={6}>
+          <Form.Item
+            label="Category"
+            name={[field.name, "category"]}
+            rules={[{ required: true, message: "Required" }]}
+          >
+            <Select placeholder="Select category">
+              {expenseFields.map((cat) => (
+                <Select.Option key={cat.value} value={cat.value}>
+                  {cat.field}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+
+        <Col xs={24} md={6}>
+          <Form.Item
+            label="Expense"
+            name={[field.name, "expenseName"]}
+            rules={[{ required: true, message: "Required" }]}
+          >
+            <Select placeholder="Select..." disabled={!selectedCategory}>
+              {expenseOptions.map((option) => (
+                <Select.Option key={option.value} value={option.value}>
+                  {option.label}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+
+        <Col xs={24} md={6}>
+          <Form.Item
+            label="Amount"
+            name={[field.name, "amount"]}
+            rules={[{ required: true, message: "Required" }]}
+          >
+            <Input placeholder="1000" />
+          </Form.Item>
+        </Col>
+
+        <Col xs={24} md={6}>
+          <Form.Item
+            label="Frequency"
+            name={[field.name, "frequency"]}
+            rules={[{ required: true, message: "Required" }]}
+          >
+            <Select
+              placeholder="Select..."
+              onChange={(value) => setRange(value)}
+              value={range}
+            >
+              {frequency.map((f) => (
+                <Select.Option key={f.value} value={f.value}>
+                  {f.label}
+                </Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+        </Col>
+        <Col xs={24} md={6}>
+          <StartDate
+            startDate={startDate}
+            setStartDate={setStartDate}
+            fieldName={[field.name]}
+          />
+        </Col>
+        <Col xs={24} md={6}>
+          <EndDate
+            range={range}
+            startDate={startDate}
+            fieldName={[field.name]}
+          />
+        </Col>
+      </Row>
+    </Card>
+  );
+};
+
+const AddExpenses = () => {
+  const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
       const allValues = await form.validateFields();
-      console.log(allValues);
+      const expenses = allValues.expensesDetails || [];
+      const formattedExpenses = expenses.map((entry) => ({
+        ...entry,
+        startDate: entry.startDate?.format("YYYY-MM-DD"),
+        endDate: entry.endDate?.format("YYYY-MM-DD"),
+      }));
+      const finalValues = { Expenses: formattedExpenses };
+      console.log(finalValues);
     } catch (error) {
       console.log(error);
       const errorMessage =
@@ -107,150 +245,44 @@ const AddExpenses = () => {
         level={2}
         style={{ fontFamily: "Raleway", textAlign: "center", marginBottom: 40 }}
       >
-        Expenses Breakdown
+        Expenses
       </Typography.Title>
 
       <Form form={form} layout="vertical" onFinish={handleSubmit}>
-        <Form.List name="Expenses">
+        <Form.List name="expensesDetails">
           {(fields, { add, remove }) => (
             <>
-              {fieldss.map((field) => (
-                <Card
+              {fields.map((field) => (
+                <ExpenseItem
                   key={field.key}
-                  title={
-                    <Typography.Title
-                      level={5}
-                      style={{ fontFamily: "Raleway", marginBottom: 0 }}
-                    >
-                      {field.field}
-                    </Typography.Title>
-                  }
-                  style={{
-                    marginBottom: 24,
-                    borderRadius: 12,
-                    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-                  }}
-                  bodyStyle={{ padding: "1.5rem" }}
-                >
-                  <Form.List name={[field.value, `${field.value}Details`]}>
-                    {(subFields, subOpt) => (
-                      <>
-                        {subFields.map((subField) => (
-                          <Row gutter={16} key={subField.key} align="middle">
-                            <Col xs={24} md={7}>
-                              <Form.Item
-                                label="Expense"
-                                name={[subField.name, "expenseName"]}
-                                rules={[
-                                  { required: true, message: "Required" },
-                                ]}
-                              >
-                                <Select placeholder="Select category">
-                                  {field.category.map((i) => (
-                                    <Select.Option
-                                      key={i.value}
-                                      value={i.value}
-                                    >
-                                      {i.label}
-                                    </Select.Option>
-                                  ))}
-                                </Select>
-                              </Form.Item>
-                            </Col>
-
-                            <Col xs={24} md={7}>
-                              <Form.Item
-                                label="Amount"
-                                name={[subField.name, "amount"]}
-                                rules={[
-                                  { required: true, message: "Required" },
-                                ]}
-                              >
-                                <Input placeholder="1000" />
-                              </Form.Item>
-                            </Col>
-
-                            <Col xs={24} md={7}>
-                              <Form.Item
-                                label="Frequency"
-                                name={[subField.name, "frequency"]}
-                                rules={[
-                                  { required: true, message: "Required" },
-                                ]}
-                              >
-                                <Select
-                                  placeholder="Select..."
-                                  onChange={(value) => setRange(value)}
-                                  value={range}
-                                >
-                                  {frequency.map((f) => (
-                                    <Select.Option
-                                      key={f.value}
-                                      value={f.value}
-                                    >
-                                      {f.label}
-                                    </Select.Option>
-                                  ))}
-                                </Select>
-                              </Form.Item>
-                            </Col>
-
-                            <Col xs={24} md={12}>
-                              <StartDate
-                                fieldName={subField.name}
-                                startDate={startDate}
-                                setStartDate={setStartDate}
-                                range={range}
-                              />
-
-                              <EndDate
-                                range={range}
-                                startDate={startDate}
-                                fieldName={subField.name}
-                                form={form}
-                              />
-                            </Col>
-
-                            <Col xs={24} md={3} style={{ textAlign: "center" }}>
-                              <Button
-                                danger
-                                type="text"
-                                icon={<CloseOutlined />}
-                                onClick={() => subOpt.remove(subField.name)}
-                              />
-                            </Col>
-                          </Row>
-                        ))}
-
-                        <Form.Item>
-                          <Button
-                            type="dashed"
-                            icon={<PlusOutlined />}
-                            onClick={() => subOpt.add()}
-                            style={{
-                              width: "100%",
-                              fontFamily: "Roboto",
-                              borderStyle: "dashed",
-                            }}
-                          >
-                            Add Expense Detail
-                          </Button>
-                        </Form.Item>
-                      </>
-                    )}
-                  </Form.List>
-                </Card>
+                  field={field}
+                  remove={remove}
+                  form={form}
+                  expenseFields={expenseFields}
+                  categoryMap={categoryMap}
+                  frequency={frequency}
+                />
               ))}
+
+              <Form.Item>
+                <Button
+                  type="dashed"
+                  icon={<PlusOutlined />}
+                  onClick={() => add()}
+                  style={{ width: "100%", fontFamily: "Roboto" }}
+                >
+                  Add An Expense
+                </Button>
+              </Form.Item>
             </>
           )}
         </Form.List>
 
         <Form.Item>
-          <Button type="primary" loading={loading} htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={loading}>
             {loading ? "Submitting..." : "Submit"}
           </Button>
         </Form.Item>
-
         <Form.Item noStyle shouldUpdate>
           {() => (
             <Typography.Paragraph

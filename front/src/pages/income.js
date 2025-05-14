@@ -1,6 +1,5 @@
 import React from "react";
 import AddIncome from "./addIncome";
-import AddExpenses from "./addExpenses";
 import IncomeData from "../components/incomeData.js";
 
 function Income() {
@@ -15,8 +14,7 @@ function Income() {
       (deficit). Percentage of Income Spent on Each Category: This can provide
       valuable insights into where the bulk of your money is going. For example,
       calculating (Housing Expenses / Total Income) * 100%.
-      {/* <AddIncome /> */}
-      {/* <AddExpenses /> */}
+      <AddIncome />
       <IncomeData />
     </>
   );
