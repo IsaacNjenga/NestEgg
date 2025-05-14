@@ -1,6 +1,6 @@
 import { CloseOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Card, Form, Input, Row, Col, Typography, Select } from "antd";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   housingCategory,
   foodCategory,
@@ -19,6 +19,7 @@ import EndDate from "../components/endDate";
 import Swal from "sweetalert2";
 //import { format } from "date-fns";
 import { useWatch } from "antd/es/form/Form";
+import { UserContext } from "../App";
 
 const categoryMap = {
   Housing: housingCategory,
@@ -97,6 +98,7 @@ const ExpenseItem = ({
 }) => {
   const [range, setRange] = useState("monthly");
   const [startDate, setStartDate] = useState(null);
+  const { isMobile } = useContext(UserContext);
 
   const selectedCategory = useWatch(
     ["expensesDetails", field.name, "category"],
@@ -185,6 +187,15 @@ const ExpenseItem = ({
             </Select>
           </Form.Item>
         </Col>
+      </Row>
+      <div
+        style={{
+          display: "flex",
+          gap: "2px",
+          justifyContent: "left",
+          flexDirection: isMobile ? "column" : "row",
+        }}
+      >
         <Col xs={24} md={6}>
           <StartDate
             startDate={startDate}
@@ -199,7 +210,7 @@ const ExpenseItem = ({
             fieldName={[field.name]}
           />
         </Col>
-      </Row>
+      </div>
     </Card>
   );
 };

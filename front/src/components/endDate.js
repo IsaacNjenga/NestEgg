@@ -38,45 +38,43 @@ function EndDate({ range, startDate, fieldName }) {
   return (
     <>
       {endDate ? (
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <span>Set the end date to: {endDate.format("YYYY-MM-DD")}</span>
-          <br />
+        <div>
           <Form.Item
-  label="End Date"
-  name={[fieldName, "endDate"]}
-  rules={[
-    {
-      required: true,
-      message: "End date is required",
-    },
-    ({ getFieldValue }) => ({
-      validator(_, value) {
-        if (!value || !startDate || !rangeToDays[range]) {
-          return Promise.resolve(); // Skip validation if missing inputs
-        }
+            label="End Date"
+            name={[fieldName, "endDate"]}
+            rules={[
+              {
+                required: false,
+              },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || !startDate || !rangeToDays[range]) {
+                    return Promise.resolve(); // Skip validation if missing inputs
+                  }
 
-        const expected = startDate.clone().add(rangeToDays[range], "days").startOf("day");
-        const selected = value.clone().startOf("day");
+                  const expected = startDate
+                    .clone()
+                    .add(rangeToDays[range], "days")
+                    .startOf("day");
+                  const selected = value.clone().startOf("day");
 
-        if (selected.isSame(expected)) {
-          return Promise.resolve();
-        }
-        return Promise.reject(
-          new Error(`End date must be ${expected.format("YYYY-MM-DD")}`)
-        );
-      },
-    }),
-  ]}
->
+                  if (selected.isSame(expected)) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(
+                    new Error(
+                      `End date must be ${expected.format("YYYY-MM-DD")}`
+                    )
+                  );
+                },
+              }),
+            ]}
+          >
             <DatePicker
               value={endDate}
               onChange={(value) => handleChange(fieldName, value)}
             />
+            <p>({endDate.format("YYYY-MM-DD")})</p>
           </Form.Item>
         </div>
       ) : null}
